@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "",
   "main": "lib/index.js",
+  "bin": {
+    "c4bru": "bin/index.js"
+  },
   "scripts": {
     "test": "tap",
     "clean": "./scripts/clean.ts",
@@ -12,7 +15,8 @@
     "posttest": "npm run lint",
     "skeleton:apply": "code-skeleton apply",
     "skeleton:verify": "code-skeleton verify",
-    "prepack": "tsc --project tsconfig.build.json"
+    "prepack": "tsc --project tsconfig.build.json && npm run update-shebang",
+    "update-shebang": "./scripts/update-shebang.ts"
   },
   "keywords": [],
   "author": "",
@@ -22,12 +26,16 @@
     "@tsconfig/node18": "^18.0.0",
     "@types/node": "^18.0.0",
     "@types/tap": "^15.0.0",
+    "@types/yargs": "^17.0.32",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",
     "tap": "^16.0.0",
     "ts-node": "^10.0.0",
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "yargs": "^17.7.2"
   },
   "skeleton": {
     "module": "@code4rena/skeleton",
