@@ -1,0 +1,47 @@
+{
+  "name": "botrace-utils",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "tap",
+    "clean": "./scripts/clean.ts",
+    "prelint": "tsc --noEmit",
+    "lint": "eslint .",
+    "postlint": "npm run skeleton:verify",
+    "posttest": "npm run lint",
+    "skeleton:apply": "code-skeleton apply",
+    "skeleton:verify": "code-skeleton verify",
+    "prepack": "tsc --project tsconfig.build.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@code4rena/skeleton": "1.1.3",
+    "@tsconfig/node18": "^18.0.0",
+    "@types/node": "^18.0.0",
+    "@types/tap": "^15.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "tap": "^16.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  },
+  "skeleton": {
+    "module": "@code4rena/skeleton"
+  },
+  "//": "This file is partially managed by code-skeleton. Changes may be overwritten.",
+  "files": [
+    "bin/**/*.js",
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "!lib/types/**"
+  ],
+  "tap": {
+    "coverage": true,
+    "ts": true
+  },
+  "types": "lib/index.d.ts"
+}
