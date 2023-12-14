@@ -1,5 +1,5 @@
 {
-  "name": "botrace-utils",
+  "name": "@code4rena/botrace-utils",
   "version": "0.0.0",
   "description": "",
   "main": "lib/index.js",
