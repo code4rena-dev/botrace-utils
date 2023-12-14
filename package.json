@@ -30,7 +30,10 @@
     "typescript": "^5.0.0"
   },
   "skeleton": {
-    "module": "@code4rena/skeleton"
+    "module": "@code4rena/skeleton",
+    "variables": {
+      "library": true
+    }
   },
   "//": "This file is partially managed by code-skeleton. Changes may be overwritten.",
   "files": [
