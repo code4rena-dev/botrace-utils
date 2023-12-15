@@ -48,6 +48,7 @@
   "files": [
     "bin/**/*.js",
     "lib/**/*.js",
+    "lib/**/*.json",
     "lib/**/*.d.ts",
     "!lib/types/**"
   ],
