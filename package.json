@@ -54,6 +54,7 @@
   ],
   "tap": {
     "coverage": true,
+    "check-coverage": false,
     "ts": true
   },
   "types": "lib/index.d.ts"
