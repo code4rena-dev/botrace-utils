@@ -11,7 +11,8 @@ import { Report } from "../lib/types";
 import {
   SCHEMA_VERSION_DEFAULT,
   SCHEMA_VERSIONS,
-  validateReport
+  validateReport,
+  renderReport
 } from "../lib/index";
 
 const print = new Console(process.stderr);
@@ -21,7 +22,7 @@ type Args = {
   schema: string;
 };
 
-const validate = async (argv: Args) => {
+const readReport = async (argv: Args): Promise<Report> => {
   const path = Path.resolve(argv.report);
   const rawFile = await readFile(path, { encoding: "utf-8" });
   let report;
@@ -32,6 +33,10 @@ const validate = async (argv: Args) => {
     process.exit(1);
   }
 
+  return report;
+};
+
+const validate = async (argv: Args, report: Report) => {
   if (argv.schema !== SCHEMA_VERSION_DEFAULT) {
     print.warn(`WARNING: consider validating against ${SCHEMA_VERSION_DEFAULT} to avoid potential submission failures`);
   }
@@ -59,8 +64,11 @@ void yargs(hideBin(process.argv))
     aliases: ["gen", "$0"],
     describe: "Converts the provided json report into markdown. The report will be validated before generation.",
     handler: async (argv: ArgumentsCamelCase<Args>) => {
-      await validate(argv);
+      const report = await readReport(argv);
+      await validate(argv, report);
       print.log(`Validation successful, generating markdown...`);
+      const reportOut = renderReport(report);
+      process.stdout.write(reportOut);
     }
   })
   .command({
@@ -68,7 +76,8 @@ void yargs(hideBin(process.argv))
     aliases: ["val"],
     describe: "Validates the projected json report against the Bot Race Schema.",
     handler: async (argv: ArgumentsCamelCase<Args>) => {
-      await validate(argv);
+      const report = await readReport(argv);
+      await validate(argv, report);
       print.log(`Validation successful`);
     }
   })

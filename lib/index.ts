@@ -56,14 +56,14 @@ export const getSeverityCode = (sev: Severity) => {
 };
 
 export const getInstancePartial = (instance: Instance) => {
-  return `${instance.content}\n\n*GitHub* : ${instance.loc.join(",")}`;
+  return `\n${instance.content}\n\n*GitHub* : ${instance.loc.join(",")}`;
 };
 
-export const getSubmissionPartial = (submission: Submission, locCount: number, num: number) => {
+export const getSubmissionPartial = (submission: Submission, locCount: number, formattedIndex: string) => {
   const sevCode = getSeverityCode(submission.severity);
   // Join each section of the partial with a newline delimiter
   return [
-    `### [${sevCode}-${num}]<a name="${sevCode.toLowerCase()}-${num}"></a> ${submission.title}`,
+    `### [${sevCode}-${formattedIndex}]<a name="${sevCode.toLowerCase()}-${formattedIndex}"></a> ${submission.title}`,
     submission.description,
     `*There are ${locCount} instance(s) of this issue:*`,
     ...submission.instances.map(getInstancePartial)
@@ -81,7 +81,7 @@ export const renderReport = (report: Report, botName?: string) => {
     "Disputed": [],
   };
   for (const [sev, array] of Object.entries(severitySections)) {
-    array.push(`### ${sev} Risk Issues`);
+    array.push(`\n### ${sev} Risk Issues`);
   }
 
   const severityCount: Record<Severity, number> = {
@@ -104,10 +104,6 @@ export const renderReport = (report: Report, botName?: string) => {
   // n-<severity>-bot-report.md
   // footnotes-bot-report.md
 
-  // For every submissions
-  //-- Write an entry to the table of contents
-  //-- Write an entry to its severity section
-
   for (const sub of report.findings) {
     // Total all the loc found across all instances of this submission
     const locCount = sub.instances.reduce((count: number, instance: Instance) => {
@@ -116,14 +112,15 @@ export const renderReport = (report: Report, botName?: string) => {
 
     //-- Write an entry to the table of contents
     const sevCode = getSeverityCode(sub.severity);
-    const index = severityCount[sub.severity]++;
+    const index = ++severityCount[sub.severity];
+    const formattedIndex = index < 10 ? `0${index}` : `${index}`;
     tocSummaryArray.push(
-      `| [[${sevCode}-${index}](#${sevCode.toLowerCase()}-${index})] | ${sub.title} | ${locCount}| ${sub.gasSavings ?? 0}|`
+      `| [[${sevCode}-${formattedIndex}](#${sevCode.toLowerCase()}-${formattedIndex})] | ${sub.title} | ${locCount}| ${sub.gasSavings ?? 0}|`
     );
 
     //-- Write an entry to its severity section
     severitySections[sub.severity].push(
-      getSubmissionPartial(sub, locCount, index)
+      getSubmissionPartial(sub, locCount, formattedIndex)
     );
   }
 
@@ -152,9 +149,9 @@ export const renderReport = (report: Report, botName?: string) => {
     partials.push(...markdownArray);
   }
 
-  // Append the footnote if we have it
+  // Append the footnote if we have it with extra space
   if (report.footnote) {
-    partials.push(report.footnote);
+    partials.push(`\n${report.footnote}`);
   }
 
   // Join all the partials with newlines
