@@ -32,3 +32,35 @@ c4bru ./report.json > report.md
 ```
 
 ### As a library
+
+**JSON validation**
+```ts
+import {
+  defaultVersion,
+  schemas,
+  validateReport,
+} from "@code4rena/botrace-utils";
+
+const validate = (reportJson) => {
+  // Automatically use the default schema
+  return validateReport(reportJson);
+  // Or a specific version
+  return validateReport(reportJson, schemas[defaultVersion]);
+  return validateReport(reportJson, schemas["0.2.0"]);
+};
+```
+
+**Markdown Rendering**
+_Note: the api does not validate before rendering, it's recommended you run validation prior to rendering_
+
+```ts
+import {
+  renderReport,
+} from "@code4rena/botrace-utils";
+
+const toMarkdown = (reportJson, winningBotName) => {
+  return renderReport(reportJson);
+  // Optionally pass a bot name to include the winning report messaging
+  return renderReport(reportJson, winningBotName);
+};
+```

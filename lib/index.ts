@@ -73,6 +73,17 @@ export const getSubmissionPartial = (submission: Submission, locCount: number, f
   ].join("\n");
 };
 
+/**
+ * Renders the JSON formatted bot report to markdown. To render a winning report,
+ * pass the name of the winning bot.
+ *
+ * It is strongly recommended to run `validateReport` on the JSON prior to rendering.
+ * renderReport may not be backward compatible with older schema versions than default.
+ *
+ * @param report The JSON formatted bot report.
+ * @param botName If included, the winning bot language will be included for this bot name
+ * @returns A markdown formatted string
+ */
 export const renderReport = (report: Report, botName?: string) => {
   const severitySections: Record<Severity, Markdown[]> = {
     "High": [],
