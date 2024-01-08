@@ -5,9 +5,9 @@ import Path from "node:path";
 import { Report } from "../lib/types";
 
 import {
-  SCHEMA_VERSIONS,
   renderReport,
-  validateReport
+  validateReport,
+  schemas
 } from "../lib";
 
 let basicReport:Report;
@@ -37,31 +37,25 @@ void t.test("should render a basic best bot report", (t) => {
   t.end();
 });
 
-void t.test("should validate a good report", async (t) => {
-  for (const version of SCHEMA_VERSIONS) {
-    const schemaPath = Path.resolve(`./lib/schemas/${version}.json`);
-    const schemaFile = await readFile(schemaPath, { encoding: "utf8" });
-    const schema = JSON.parse(schemaFile) as JSON;
-
+void t.test("should validate a good report", (t) => {
+  for (const schema of Object.values(schemas)) {
     t.equal(validateReport(basicReport, schema), null);
   }
+  t.end();
 });
 
-void t.test("should error on invalid report (schema 0.1)", async (t) => {
-  const schemaPath = Path.resolve(`./lib/schemas/0.1.0.json`);
-  const schemaFile = await readFile(schemaPath, { encoding: "utf8" });
-  const schema = JSON.parse(schemaFile) as JSON;
+void t.test("should error on invalid report (schema 0.1)", (t) => {
+  const schema = schemas["0.1.0"];
 
   t.same(validateReport(invalidReport, schema), [{
     "instancePath": "/findings/0/instances/0",
     "message": "must be object"
   }]);
+  t.end();
 });
 
-void t.test("should error on invalid report (schema 0.2)", async (t) => {
-  const schemaPath = Path.resolve(`./lib/schemas/0.2.0.json`);
-  const schemaFile = await readFile(schemaPath, { encoding: "utf8" });
-  const schema = JSON.parse(schemaFile) as JSON;
+void t.test("should error on invalid report (schema 0.2)", (t) => {
+  const schema = schemas["0.2.0"];
 
   t.same(validateReport(invalidReport, schema), [{
     "instancePath": "/findings/0/severity",
@@ -73,4 +67,5 @@ void t.test("should error on invalid report (schema 0.2)", async (t) => {
     "instancePath": "/findings/1/severity",
     "message": "must be equal to one of the allowed values"
   }]);
+  t.end();
 });

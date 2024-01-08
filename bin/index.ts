@@ -7,19 +7,20 @@ import Path from "node:path";
 import { readFile } from "node:fs/promises";
 
 import { Report } from "../lib/types";
-
 import {
-  SCHEMA_VERSION_DEFAULT,
-  SCHEMA_VERSIONS,
+  defaultVersion,
+  schemas,
   validateReport,
   renderReport
 } from "../lib/index";
 
+const schemaVersions = Object.keys(schemas);
 const print = new Console(process.stderr);
 
 type Args = {
   report: string;
-  schema: string;
+  schema: keyof typeof schemas;
+  skip?: boolean;
 };
 
 const readReport = async (argv: Args): Promise<Report> => {
@@ -36,14 +37,16 @@ const readReport = async (argv: Args): Promise<Report> => {
   return report;
 };
 
-const validate = async (argv: Args, report: Report) => {
-  if (argv.schema !== SCHEMA_VERSION_DEFAULT) {
-    print.warn(`WARNING: consider validating against ${SCHEMA_VERSION_DEFAULT} to avoid potential submission failures`);
+const validate = (argv: Args, report: Report) => {
+  if (argv.schema !== defaultVersion) {
+    print.warn(`WARNING: consider validating against ${defaultVersion} to avoid potential submission failures`);
+  }
+  if (!schemaVersions.includes(argv.schema)) {
+    print.error(`${argv.schema} is not a valid version. Must be one of [${schemaVersions.join(", ")}].`);
+    process.exit(1);
   }
 
-  const schemaPath = Path.resolve(`./lib/schemas/${argv.schema}.json`);
-  const schemaFile = await readFile(schemaPath, { encoding: "utf8" });
-  const schema = JSON.parse(schemaFile) as JSON;
+  const schema = schemas[argv.schema];
 
   print.log(`Validating ${argv.report} against schema version ${argv.schema}`);
   const validationErrors = validateReport(report, schema);
@@ -65,7 +68,7 @@ void yargs(hideBin(process.argv))
     describe: "Converts the provided json report into markdown. The report will be validated before generation.",
     handler: async (argv: ArgumentsCamelCase<Args>) => {
       const report = await readReport(argv);
-      await validate(argv, report);
+      validate(argv, report);
       print.log(`Validation successful, generating markdown...`);
       const reportOut = renderReport(report);
       process.stdout.write(reportOut);
@@ -77,7 +80,7 @@ void yargs(hideBin(process.argv))
     describe: "Validates the projected json report against the Bot Race Schema.",
     handler: async (argv: ArgumentsCamelCase<Args>) => {
       const report = await readReport(argv);
-      await validate(argv, report);
+      validate(argv, report);
       print.log(`Validation successful`);
     }
   })
@@ -87,9 +90,9 @@ void yargs(hideBin(process.argv))
   .option("s", {
     array: false,
     description: "The schema version to validate against",
-    default: SCHEMA_VERSION_DEFAULT,
+    default: defaultVersion,
     alias: "schema",
-    choices: SCHEMA_VERSIONS
+    choices: schemaVersions
   })
   .help()
   .version()

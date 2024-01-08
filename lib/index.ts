@@ -7,8 +7,11 @@ import {
   Submission
 } from "./types";
 
-export const SCHEMA_VERSION_DEFAULT = "0.2.0";
-export const SCHEMA_VERSIONS = ["0.3.0", "0.2.0", "0.1.0"];
+import {
+  defaultVersion,
+  schemas
+} from "./schemas";
+export * from "./schemas";
 
 /**
  * Returns partial errors for the Bot Race json schema validation
@@ -28,7 +31,7 @@ const formatValidationErrors = (errors: ValidationError["errors"]) => {
  * If successul, null is returned, otherwise an array of
  * validation errors will be returned
  */
-export const validateReport = (reportJson: Report, schema: JSON) => {
+export const validateReport = (reportJson: Report, schema: object = schemas[defaultVersion]) => {
   const ajv = new Ajv({ allErrors: true });
   const validate = ajv.compile(schema);
   const valid = validate(reportJson);
