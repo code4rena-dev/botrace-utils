@@ -5,6 +5,7 @@ import Path from "node:path";
 import { Report } from "../lib/types";
 
 import {
+  defaultVersion,
   renderReport,
   validateReport,
   schemas
@@ -64,8 +65,42 @@ void t.test("should error on invalid report (schema 0.2)", (t) => {
     "instancePath": "/findings/0/instances/0",
     "message": "must be object"
   }, {
-    "instancePath": "/findings/1/severity",
+    "instancePath": "/findings/2/severity",
     "message": "must be equal to one of the allowed values"
+  }]);
+  t.end();
+});
+
+void t.test("should error on invalid report (schema default)", (t) => {
+  const schema = schemas[defaultVersion];
+
+  t.same(validateReport(invalidReport, schema), [{
+    "instancePath": "/findings/0/severity",
+    "message": "must be equal to one of the allowed values"
+  }, {
+    "instancePath": "/findings/0/instances/0",
+    "message": "must be object"
+  }, {
+    "instancePath": "/findings/1/instances/0/content",
+    "message": "must match pattern \"^(`{3})[^`]*(\\1)$\"",
+  }, {
+    "instancePath": "/findings/1/instances/0/loc/1",
+    "message": "must match pattern \"https:\\/\\/github\\.com\\/[^\\/]+\\/.*#L\\d+(-L\\d+)?\\)?$\"",
+  }, {
+    "instancePath": "/findings/2/severity",
+    "message": "must be equal to one of the allowed values"
+  }, {
+    "instancePath": "/findings/2/instances/0/content",
+    "message": "must match pattern \"^(`{3})[^`]*(\\1)$\"",
+  }, {
+    "instancePath": "/findings/2/instances/0/loc/0",
+    "message": "must match pattern \"https:\\/\\/github\\.com\\/[^\\/]+\\/.*#L\\d+(-L\\d+)?\\)?$\"",
+  }, {
+    "instancePath": "/findings/2/instances/0/loc/1",
+    "message": "must match pattern \"https:\\/\\/github\\.com\\/[^\\/]+\\/.*#L\\d+(-L\\d+)?\\)?$\"",
+  }, {
+    "instancePath": "/findings/2/instances/0/loc/2",
+    "message": "must match pattern \"https:\\/\\/github\\.com\\/[^\\/]+\\/.*#L\\d+(-L\\d+)?\\)?$\"",
   }]);
   t.end();
 });

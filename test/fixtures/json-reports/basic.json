@@ -158,7 +158,7 @@
       {
         "content": "```solidity\nFile: contracts/libraries/code4rena-devMath.sol\n\n57:                  (uint64(uint256(keccak256(abi.encodePacked(token0, token1, fee)))) >> 32);\n\n```",
         "loc": [
-          "[57](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L57-L57)"
+          "https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L57-L57"
         ]
       }
     ]

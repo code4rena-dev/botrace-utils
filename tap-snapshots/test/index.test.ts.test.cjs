@@ -282,7 +282,7 @@ File: contracts/libraries/code4rena-devMath.sol
 
 \`\`\`
 
-*GitHub* : [57](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L57-L57)
+*GitHub* : https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L57-L57
 
 ##Extras
 An optional markdown based footnote section
@@ -563,7 +563,7 @@ File: contracts/libraries/code4rena-devMath.sol
 
 \`\`\`
 
-*GitHub* : [57](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L57-L57)
+*GitHub* : https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L57-L57
 
 ##Extras
 An optional markdown based footnote section
