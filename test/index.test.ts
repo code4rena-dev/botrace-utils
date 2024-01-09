@@ -82,7 +82,7 @@ void t.test("should error on invalid report (schema default)", (t) => {
     "message": "must be object"
   }, {
     "instancePath": "/findings/1/instances/0/content",
-    "message": "must match pattern \"^(`{3})[^`]*(\\1)$\"",
+    "message": "must match pattern \"^```([a-zA-Z0-9]+)?\\n([\\s\\S]*?)\\n```$\"",
   }, {
     "instancePath": "/findings/1/instances/0/loc/1",
     "message": "must match pattern \"https:\\/\\/github\\.com\\/[^\\/]+\\/.*#L\\d+(-L\\d+)?\\)?$\"",
@@ -91,7 +91,7 @@ void t.test("should error on invalid report (schema default)", (t) => {
     "message": "must be equal to one of the allowed values"
   }, {
     "instancePath": "/findings/2/instances/0/content",
-    "message": "must match pattern \"^(`{3})[^`]*(\\1)$\"",
+    "message": "must match pattern \"^```([a-zA-Z0-9]+)?\\n([\\s\\S]*?)\\n```$\"",
   }, {
     "instancePath": "/findings/2/instances/0/loc/0",
     "message": "must match pattern \"https:\\/\\/github\\.com\\/[^\\/]+\\/.*#L\\d+(-L\\d+)?\\)?$\"",

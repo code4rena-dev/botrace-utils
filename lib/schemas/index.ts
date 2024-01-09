@@ -198,7 +198,7 @@ export const schemas = {
                   "content": {
                     "description": "This is expected to be in code block format and must start and end with ```. Content is for code snippets, @audit tags, and file data. You may choose to stack all content for an individual file here as a block, or treat it as an individual instance. If you wish to treat these as seperate instances instead of a block of instances, and you need the file to be present for each instance, please ensure that you include this in the content of each issue. If the issue is with the whole file you may leave this empty and just have the link in the loc field",
                     "type": ["string", "null"],
-                    "pattern": "^(`{3})[^`]*(\\1)$"
+                    "pattern": "^```([a-zA-Z0-9]+)?\\n([\\s\\S]*?)\\n```$"
                   },
                   "loc":{
                     "description": "links to the line of code",
