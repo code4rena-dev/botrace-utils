@@ -219,8 +219,6 @@ File: contracts/tokens/ERC1155Minimal.sol
 
 *GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
 
-### Refactoring Risk Issues
-
 ### Disputed Risk Issues
 ### [D-01]<a name="d-01"></a> ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~
 These do not have consecutive dynamic typed arguments
@@ -519,8 +517,6 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
-
-### Refactoring Risk Issues
 
 ### Disputed Risk Issues
 ### [D-01]<a name="d-01"></a> ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~

@@ -164,9 +164,9 @@ export const renderReport = (report: Report, botName?: string) => {
     ...tocSummaryArray
   ];
 
-  // Add all severties that have data
+  // Add all severities that have data
   for (const markdownArray of Object.values(severitySections)) {
-    if (markdownArray.length === 0) continue;
+    if (markdownArray.length === 1) continue;
     partials.push(...markdownArray);
   }
 
