@@ -59,11 +59,12 @@ export const getSeverityCode = (sev: Severity) => {
 };
 
 export const getInstancePartial = (instance: Instance) => {
-  const partial = [
-    `\n${instance.content}\n`
-  ];
+  const partial = [];
+  if (instance.content) {
+    partial.push(`\n${instance.content}`);
+  }
   if (instance.loc.length > 0) {
-    partial.push(`*GitHub* : ${instance.loc.join(",")}`);
+    partial.push(`\n*GitHub* : ${instance.loc.join(",")}`);
   }
   return partial.join("\n");
 };

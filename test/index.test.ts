@@ -26,12 +26,12 @@ void t.before(async () => {
 });
 
 void t.test("should render a basic report", (t) => {
-  t.matchSnapshot(renderReport(basicReport));
+  t.matchSnapshot(renderReport(basic03Report));
   t.end();
 });
 
 void t.test("should render a basic best bot report", (t) => {
-  t.matchSnapshot(renderReport(basicReport, "cool-bot"));
+  t.matchSnapshot(renderReport(basic03Report, "cool-bot"));
   t.end();
 });
 
