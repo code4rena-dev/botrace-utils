@@ -8,7 +8,9 @@
 exports[`test/index.test.ts TAP should render a basic best bot report > must match snapshot 1`] = `
 # Winning bot race submission
 This is the top-ranked automated findings report, from cool-bot bot. All findings in this report will be considered known issues for the purposes of your C4 audit.
+
 **An optional, bold markdown note**
+
 ## Summary
 
 | |Issue|Instances| Gas Savings
@@ -18,8 +20,8 @@ This is the top-ranked automated findings report, from cool-bot bot. All finding
 | [[L-01](#l-01)] | Consider implementing two-step procedure for updating protocol addresses | 1| 0|
 | [[L-02](#l-02)] | Vulnerable versions of packages are being used | 0| 0|
 | [[L-03](#l-03)] | Vulnerable versions of packages are being used | 3| 0|
-| [[N-01](#n-01)] | \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\` | 21| 0|
 | [[G-01](#g-01)] | \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped | 6| 0|
+| [[N-01](#n-01)] | \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\` | 21| 0|
 | [[D-01](#d-01)] | ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~ | 9| 0|
 
 ### High Risk Issues
@@ -106,6 +108,44 @@ This project is using specific package versions which are vulnerable to the spec
 
 *GitHub* : [384](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L384),[1281](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1281),[1284](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1284)
 
+### Gas Risk Issues
+### [G-01]<a name="g-01"></a> \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped
+\`for (uint256 i; i < len; ++i){ ... }\` -> \`do { ...; ++i } while (i < len);\`
+*There are 6 instance(s) of this issue:*
+
+\`\`\`solidity
+File: contracts/SemiFungiblePositionManager.sol
+
+550:         for (uint256 i = 0; i < ids.length; ) {
+
+583:         for (uint256 leg = 0; leg < numLegs; ) {
+
+860:         for (uint256 leg = 0; leg < numLegs; ) {
+
+\`\`\`
+
+*GitHub* : [550](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L550-L550),[583](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L583-L583),[860](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L860-L860)
+
+\`\`\`solidity
+File: contracts/multicall/Multicall.sol
+
+14:          for (uint256 i = 0; i < data.length; ) {
+
+\`\`\`
+
+*GitHub* : [14](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/multicall/Multicall.sol#L14-L14)
+
+\`\`\`solidity
+File: contracts/tokens/ERC1155Minimal.sol
+
+141:         for (uint256 i = 0; i < ids.length; ) {
+
+187:             for (uint256 i = 0; i < owners.length; ++i) {
+
+\`\`\`
+
+*GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
+
 ### NonCritical Risk Issues
 ### [N-01]<a name="n-01"></a> \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\`
 Earlier versions of solidity can use \`uint<n>(-1)\` instead. Expressions not including the \`- 1\` can often be re-written to accomodate the change (e.g. by using a \`>\` rather than a \`>=\`, which will also save some gas)
@@ -180,44 +220,6 @@ File: contracts/types/TokenId.sol
 \`\`\`
 
 *GitHub* : [337](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L337),[339](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L339),[341](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L341),[343](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L343),[417](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L417),[419](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L419),[421](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L421),[423](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L423)
-
-### Gas Risk Issues
-### [G-01]<a name="g-01"></a> \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped
-\`for (uint256 i; i < len; ++i){ ... }\` -> \`do { ...; ++i } while (i < len);\`
-*There are 6 instance(s) of this issue:*
-
-\`\`\`solidity
-File: contracts/SemiFungiblePositionManager.sol
-
-550:         for (uint256 i = 0; i < ids.length; ) {
-
-583:         for (uint256 leg = 0; leg < numLegs; ) {
-
-860:         for (uint256 leg = 0; leg < numLegs; ) {
-
-\`\`\`
-
-*GitHub* : [550](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L550-L550),[583](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L583-L583),[860](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L860-L860)
-
-\`\`\`solidity
-File: contracts/multicall/Multicall.sol
-
-14:          for (uint256 i = 0; i < data.length; ) {
-
-\`\`\`
-
-*GitHub* : [14](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/multicall/Multicall.sol#L14-L14)
-
-\`\`\`solidity
-File: contracts/tokens/ERC1155Minimal.sol
-
-141:         for (uint256 i = 0; i < ids.length; ) {
-
-187:             for (uint256 i = 0; i < owners.length; ++i) {
-
-\`\`\`
-
-*GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
 
 ### Disputed Risk Issues
 ### [D-01]<a name="d-01"></a> ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~
@@ -308,6 +310,7 @@ An optional markdown based footnote section
 
 exports[`test/index.test.ts TAP should render a basic report > must match snapshot 1`] = `
 **An optional, bold markdown note**
+
 ## Summary
 
 | |Issue|Instances| Gas Savings
@@ -317,8 +320,8 @@ exports[`test/index.test.ts TAP should render a basic report > must match snapsh
 | [[L-01](#l-01)] | Consider implementing two-step procedure for updating protocol addresses | 1| 0|
 | [[L-02](#l-02)] | Vulnerable versions of packages are being used | 0| 0|
 | [[L-03](#l-03)] | Vulnerable versions of packages are being used | 3| 0|
-| [[N-01](#n-01)] | \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\` | 21| 0|
 | [[G-01](#g-01)] | \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped | 6| 0|
+| [[N-01](#n-01)] | \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\` | 21| 0|
 | [[D-01](#d-01)] | ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~ | 9| 0|
 
 ### High Risk Issues
@@ -405,6 +408,44 @@ This project is using specific package versions which are vulnerable to the spec
 
 *GitHub* : [384](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L384),[1281](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1281),[1284](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1284)
 
+### Gas Risk Issues
+### [G-01]<a name="g-01"></a> \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped
+\`for (uint256 i; i < len; ++i){ ... }\` -> \`do { ...; ++i } while (i < len);\`
+*There are 6 instance(s) of this issue:*
+
+\`\`\`solidity
+File: contracts/SemiFungiblePositionManager.sol
+
+550:         for (uint256 i = 0; i < ids.length; ) {
+
+583:         for (uint256 leg = 0; leg < numLegs; ) {
+
+860:         for (uint256 leg = 0; leg < numLegs; ) {
+
+\`\`\`
+
+*GitHub* : [550](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L550-L550),[583](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L583-L583),[860](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L860-L860)
+
+\`\`\`solidity
+File: contracts/multicall/Multicall.sol
+
+14:          for (uint256 i = 0; i < data.length; ) {
+
+\`\`\`
+
+*GitHub* : [14](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/multicall/Multicall.sol#L14-L14)
+
+\`\`\`solidity
+File: contracts/tokens/ERC1155Minimal.sol
+
+141:         for (uint256 i = 0; i < ids.length; ) {
+
+187:             for (uint256 i = 0; i < owners.length; ++i) {
+
+\`\`\`
+
+*GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
+
 ### NonCritical Risk Issues
 ### [N-01]<a name="n-01"></a> \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\`
 Earlier versions of solidity can use \`uint<n>(-1)\` instead. Expressions not including the \`- 1\` can often be re-written to accomodate the change (e.g. by using a \`>\` rather than a \`>=\`, which will also save some gas)
@@ -479,44 +520,6 @@ File: contracts/types/TokenId.sol
 \`\`\`
 
 *GitHub* : [337](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L337),[339](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L339),[341](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L341),[343](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L343),[417](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L417),[419](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L419),[421](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L421),[423](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L423)
-
-### Gas Risk Issues
-### [G-01]<a name="g-01"></a> \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped
-\`for (uint256 i; i < len; ++i){ ... }\` -> \`do { ...; ++i } while (i < len);\`
-*There are 6 instance(s) of this issue:*
-
-\`\`\`solidity
-File: contracts/SemiFungiblePositionManager.sol
-
-550:         for (uint256 i = 0; i < ids.length; ) {
-
-583:         for (uint256 leg = 0; leg < numLegs; ) {
-
-860:         for (uint256 leg = 0; leg < numLegs; ) {
-
-\`\`\`
-
-*GitHub* : [550](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L550-L550),[583](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L583-L583),[860](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L860-L860)
-
-\`\`\`solidity
-File: contracts/multicall/Multicall.sol
-
-14:          for (uint256 i = 0; i < data.length; ) {
-
-\`\`\`
-
-*GitHub* : [14](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/multicall/Multicall.sol#L14-L14)
-
-\`\`\`solidity
-File: contracts/tokens/ERC1155Minimal.sol
-
-141:         for (uint256 i = 0; i < ids.length; ) {
-
-187:             for (uint256 i = 0; i < owners.length; ++i) {
-
-\`\`\`
-
-*GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
 
 ### Disputed Risk Issues
 ### [D-01]<a name="d-01"></a> ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~

@@ -2,6 +2,20 @@
   "comment": "**An optional, bold markdown note**",
   "footnote": "##Extras\nAn optional markdown based footnote section",
   "findings": [{
+    "severity": "Low",
+    "title": "Consider implementing two-step procedure for updating protocol addresses",
+    "description": "A copy-paste error or a typo may end up bricking protocol functionality, or sending tokens to an address with no known private key. Consider implementing a two-step procedure for updating protocol addresses, where the recipient is set as pending, and must 'accept' the assignment by making an affirmative call. A straight forward way of doing this would be to have the target contracts implement [EIP-165](https://eips.ethereum.org/EIPS/eip-165), and to have the 'set' functions ensure that the recipient is of the right interface type.",
+    "gasSavings": null,
+    "category": null,
+    "instances": [
+      {
+        "content": "```solidity\nFile: contracts/tokens/ERC1155Minimal.sol\n\n/// @audit isApprovedForAll:  setApprovalForAll()\n77       function setApprovalForAll(address operator, bool approved) public {\n78           isApprovedForAll[msg.sender][operator] = approved;\n79   \n80           emit ApprovalForAll(msg.sender, operator, approved);\n81:      }\n\n```",
+        "loc": [
+          "[77](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L77-L81)"
+        ]
+      }
+    ]
+  }, {
     "severity": "High",
     "title": "Bad things are afoot",
     "description": "The additions/multiplications may silently overflow because they're in `unchecked` blocks with no preceding value checks, which may lead to unexpected results",
@@ -35,20 +49,6 @@
           "[627](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L627-L627)",
           "[629](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L629-L629)",
           "[630](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L630-L630)"
-        ]
-      }
-    ]
-  }, {
-    "severity": "Low",
-    "title": "Consider implementing two-step procedure for updating protocol addresses",
-    "description": "A copy-paste error or a typo may end up bricking protocol functionality, or sending tokens to an address with no known private key. Consider implementing a two-step procedure for updating protocol addresses, where the recipient is set as pending, and must 'accept' the assignment by making an affirmative call. A straight forward way of doing this would be to have the target contracts implement [EIP-165](https://eips.ethereum.org/EIPS/eip-165), and to have the 'set' functions ensure that the recipient is of the right interface type.",
-    "gasSavings": null,
-    "category": null,
-    "instances": [
-      {
-        "content": "```solidity\nFile: contracts/tokens/ERC1155Minimal.sol\n\n/// @audit isApprovedForAll:  setApprovalForAll()\n77       function setApprovalForAll(address operator, bool approved) public {\n78           isApprovedForAll[msg.sender][operator] = approved;\n79   \n80           emit ApprovalForAll(msg.sender, operator, approved);\n81:      }\n\n```",
-        "loc": [
-          "[77](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L77-L81)"
         ]
       }
     ]

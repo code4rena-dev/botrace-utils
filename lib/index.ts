@@ -92,25 +92,37 @@ export const getSubmissionPartial = (submission: Submission, locCount: number, f
  * @returns A markdown formatted string
  */
 export const renderReport = (report: Report, botName?: string) => {
+  // Order of keys determines the order in which we render the submission sections
   const severitySections: Record<Severity, Markdown[]> = {
     "High": [],
     "Medium": [],
     "Low": [],
-    "NonCritical": [],
     "Gas": [],
     "Refactoring": [],
+    "NonCritical": [],
     "Disputed": [],
   };
   for (const [sev, array] of Object.entries(severitySections)) {
     array.push(`\n### ${sev} Risk Issues`);
   }
 
+  // Order of keys determines the order in which we render the TOC
+  const tocSummaries: Record<Severity, Markdown[]> = {
+    "High": [],
+    "Medium": [],
+    "Low": [],
+    "Gas": [],
+    "NonCritical": [],
+    "Refactoring": [],
+    "Disputed": [],
+  };
+
   const severityCount: Record<Severity, number> = {
     "High": 0,
     "Medium": 0,
     "Low": 0,
-    "NonCritical": 0,
     "Gas": 0,
+    "NonCritical": 0,
     "Refactoring": 0,
     "Disputed": 0,
   };
@@ -120,42 +132,46 @@ export const renderReport = (report: Report, botName?: string) => {
     `## Summary\n\n| |Issue|Instances| Gas Savings\n|-|:-|:-:|:-:|`,
   ];
 
-  // Rendering files yields:
-  // 1-Summary.md
-  // n-<severity>-bot-report.md
-  // footnotes-bot-report.md
-
+  // Prepare all the partials for every submission in the report
   for (const sub of report.findings) {
     // Total all the loc found across all instances of this submission
     const locCount = sub.instances.reduce((count: number, instance: Instance) => {
       return count + instance.loc.length;
     }, 0);
 
-    //-- Write an entry to the table of contents
+    // Write an entry to the table of contents
     const sevCode = getSeverityCode(sub.severity);
     const index = ++severityCount[sub.severity];
     const formattedIndex = index < 10 ? `0${index}` : `${index}`;
-    tocSummaryArray.push(
+
+    // Add summary to the write severity section for proper order rendering
+    tocSummaries[sub.severity].push(
       `| [[${sevCode}-${formattedIndex}](#${sevCode.toLowerCase()}-${formattedIndex})] | ${sub.title} | ${locCount}| ${sub.gasSavings ?? 0}|`
     );
 
-    //-- Write an entry to its severity section
+    // Write an entry to its severity section
     severitySections[sub.severity].push(
       getSubmissionPartial(sub, locCount, formattedIndex)
     );
   }
 
-  // If there's a comment, prepend it to the summary
-  if (report.comment) {
-    tocSummaryArray.unshift(...[
-      report.comment
-    ]);
+  // We have all the section summaries, flatten and append them to the table of contents
+  for (const summaries of Object.values(tocSummaries)) {
+    tocSummaryArray.push(...summaries);
   }
 
+  // If there's a comment, prepend it to the summary
+  if (report.comment) {
+    tocSummaryArray.unshift(
+      `${report.comment}\n`
+    );
+  }
+
+  // If a botName was provided, assume they're the winner and include the winning header
   if (botName) {
     tocSummaryArray.unshift(...[
       "# Winning bot race submission",
-      `This is the top-ranked automated findings report, from ${botName} bot. All findings in this report will be considered known issues for the purposes of your C4 audit.`
+      `This is the top-ranked automated findings report, from ${botName} bot. All findings in this report will be considered known issues for the purposes of your C4 audit.\n`
     ]);
   }
 
