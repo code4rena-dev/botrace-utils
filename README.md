@@ -11,7 +11,6 @@ Install via npm: `npm i -g @code4rena/botrace-utils`
 Or use npx to run the package directly: `npx @code4rena/botrace-utils --help`
 
 ### Command line
-#### Usage
 Once installed the `c4bru` command will be available. See `c4bru --help` for full usage.
 
 **JSON validation**
