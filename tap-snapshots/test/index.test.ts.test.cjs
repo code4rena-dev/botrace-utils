@@ -16,6 +16,8 @@ This is the top-ranked automated findings report, from cool-bot bot. All finding
 | [[H-01](#h-01)] | Bad things are afoot | 2| 0|
 | [[M-01](#m-01)] | Code does not follow the best practice of check-effects-interaction | 4| 0|
 | [[L-01](#l-01)] | Consider implementing two-step procedure for updating protocol addresses | 1| 0|
+| [[L-02](#l-02)] | Vulnerable versions of packages are being used | 0| 0|
+| [[L-03](#l-03)] | Vulnerable versions of packages are being used | 3| 0|
 | [[N-01](#n-01)] | \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\` | 21| 0|
 | [[G-01](#g-01)] | \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped | 6| 0|
 | [[D-01](#d-01)] | ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~ | 9| 0|
@@ -85,6 +87,24 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [77](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L77-L81)
+### [L-02]<a name="l-02"></a> Vulnerable versions of packages are being used
+This project is using specific package versions which are vulnerable to the specific CVEs listed below. Consider switching to more recent versions of these packages that don't have these vulnerabilities.
+- [CVE-2023-40014](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-40014) - **MEDIUM** - (\`openzeppelin-solidity >=4.0.0 <4.9.3\`): OpenZeppelin Contracts is a library for secure smart contract development. Starting in version 4.0.0 and prior to version 4.9.3, contracts using \`ERC2771Context\` along with a custom trusted forwarder may see \`_msgSender\` return \`address(0)\` in calls that originate from the forwarder with calldata shorter than 20 bytes. This combination of circumstances does not appear to be common, in particular it is not the case for \`MinimalForwarder\` from OpenZeppelin Contracts, or any deployed forwarder the team is aware of, given that the signer address is appended to all calls that originate from these forwarders. The problem has been patched in v4.9.3.
+
+- [CVE-2023-34459](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-34459) - **MEDIUM** - (\`openzeppelin-solidity >=4.7.0 <4.9.2\`): OpenZeppelin Contracts is a library for smart contract development. Starting in version 4.7.0 and prior to version 4.9.2, when the \`verifyMultiProof\`, \`verifyMultiProofCalldata\`, \`procesprocessMultiProof\`, or \`processMultiProofCalldat\` functions are in use, it is possible to construct merkle trees that allow forging a valid multiproof for an arbitrary set of leaves. A contract may be vulnerable if it uses multiproofs for verification and the merkle tree that is processed includes a node with value 0 at depth 1 (just under the root). This could happen inadvertedly for balanced trees with 3 leaves or less, if the leaves are not hashed. This could happen deliberately if a malicious tree builder includes such a node in the tree. A contract is not vulnerable if it uses single-leaf proving (\`verify\`, \`verifyCalldata\`, \`processProof\`, or \`processProofCalldata\`), or if it uses multiproofs with a known tree that has hashed leaves. Standard merkle trees produced or validated with the @openzeppelin/merkle-tree library are safe. The problem has been patched in version 4.9.2. Some workarounds are available. For those using multiproofs: When constructing merkle trees hash the leaves and do not insert empty nodes in your trees. Using the @openzeppelin/merkle-tree package eliminates this issue. Do not accept user-provided merkle roots without reconstructing at least the first level of the tree. Verify the merkle tree structure by reconstructing it from the leaves.
+*There are 0 instance(s) of this issue:*
+
+\`\`\`solidity
+/// @audit Global finding.
+\`\`\`
+### [L-03]<a name="l-03"></a> Vulnerable versions of packages are being used
+This project is using specific package versions which are vulnerable to the specific CVEs listed below. Consider switching to more recent versions of these packages that don't have these vulnerabilities.
+- [CVE-2023-40014](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-40014) - **MEDIUM** - (\`openzeppelin-solidity >=4.0.0 <4.9.3\`): OpenZeppelin Contracts is a library for secure smart contract development. Starting in version 4.0.0 and prior to version 4.9.3, contracts using \`ERC2771Context\` along with a custom trusted forwarder may see \`_msgSender\` return \`address(0)\` in calls that originate from the forwarder with calldata shorter than 20 bytes. This combination of circumstances does not appear to be common, in particular it is not the case for \`MinimalForwarder\` from OpenZeppelin Contracts, or any deployed forwarder the team is aware of, given that the signer address is appended to all calls that originate from these forwarders. The problem has been patched in v4.9.3.
+
+- [CVE-2023-34459](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-34459) - **MEDIUM** - (\`openzeppelin-solidity >=4.7.0 <4.9.2\`): OpenZeppelin Contracts is a library for smart contract development. Starting in version 4.7.0 and prior to version 4.9.2, when the \`verifyMultiProof\`, \`verifyMultiProofCalldata\`, \`procesprocessMultiProof\`, or \`processMultiProofCalldat\` functions are in use, it is possible to construct merkle trees that allow forging a valid multiproof for an arbitrary set of leaves. A contract may be vulnerable if it uses multiproofs for verification and the merkle tree that is processed includes a node with value 0 at depth 1 (just under the root). This could happen inadvertedly for balanced trees with 3 leaves or less, if the leaves are not hashed. This could happen deliberately if a malicious tree builder includes such a node in the tree. A contract is not vulnerable if it uses single-leaf proving (\`verify\`, \`verifyCalldata\`, \`processProof\`, or \`processProofCalldata\`), or if it uses multiproofs with a known tree that has hashed leaves. Standard merkle trees produced or validated with the @openzeppelin/merkle-tree library are safe. The problem has been patched in version 4.9.2. Some workarounds are available. For those using multiproofs: When constructing merkle trees hash the leaves and do not insert empty nodes in your trees. Using the @openzeppelin/merkle-tree package eliminates this issue. Do not accept user-provided merkle roots without reconstructing at least the first level of the tree. Verify the merkle tree structure by reconstructing it from the leaves.
+*There are 3 instance(s) of this issue:*
+
+*GitHub* : [384](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L384),[1281](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1281),[1284](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1284)
 
 ### NonCritical Risk Issues
 ### [N-01]<a name="n-01"></a> \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\`
@@ -198,8 +218,6 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
-
-### Refactoring Risk Issues
 
 ### Disputed Risk Issues
 ### [D-01]<a name="d-01"></a> ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~
@@ -297,6 +315,8 @@ exports[`test/index.test.ts TAP should render a basic report > must match snapsh
 | [[H-01](#h-01)] | Bad things are afoot | 2| 0|
 | [[M-01](#m-01)] | Code does not follow the best practice of check-effects-interaction | 4| 0|
 | [[L-01](#l-01)] | Consider implementing two-step procedure for updating protocol addresses | 1| 0|
+| [[L-02](#l-02)] | Vulnerable versions of packages are being used | 0| 0|
+| [[L-03](#l-03)] | Vulnerable versions of packages are being used | 3| 0|
 | [[N-01](#n-01)] | \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\` | 21| 0|
 | [[G-01](#g-01)] | \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped | 6| 0|
 | [[D-01](#d-01)] | ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~ | 9| 0|
@@ -366,6 +386,24 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [77](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L77-L81)
+### [L-02]<a name="l-02"></a> Vulnerable versions of packages are being used
+This project is using specific package versions which are vulnerable to the specific CVEs listed below. Consider switching to more recent versions of these packages that don't have these vulnerabilities.
+- [CVE-2023-40014](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-40014) - **MEDIUM** - (\`openzeppelin-solidity >=4.0.0 <4.9.3\`): OpenZeppelin Contracts is a library for secure smart contract development. Starting in version 4.0.0 and prior to version 4.9.3, contracts using \`ERC2771Context\` along with a custom trusted forwarder may see \`_msgSender\` return \`address(0)\` in calls that originate from the forwarder with calldata shorter than 20 bytes. This combination of circumstances does not appear to be common, in particular it is not the case for \`MinimalForwarder\` from OpenZeppelin Contracts, or any deployed forwarder the team is aware of, given that the signer address is appended to all calls that originate from these forwarders. The problem has been patched in v4.9.3.
+
+- [CVE-2023-34459](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-34459) - **MEDIUM** - (\`openzeppelin-solidity >=4.7.0 <4.9.2\`): OpenZeppelin Contracts is a library for smart contract development. Starting in version 4.7.0 and prior to version 4.9.2, when the \`verifyMultiProof\`, \`verifyMultiProofCalldata\`, \`procesprocessMultiProof\`, or \`processMultiProofCalldat\` functions are in use, it is possible to construct merkle trees that allow forging a valid multiproof for an arbitrary set of leaves. A contract may be vulnerable if it uses multiproofs for verification and the merkle tree that is processed includes a node with value 0 at depth 1 (just under the root). This could happen inadvertedly for balanced trees with 3 leaves or less, if the leaves are not hashed. This could happen deliberately if a malicious tree builder includes such a node in the tree. A contract is not vulnerable if it uses single-leaf proving (\`verify\`, \`verifyCalldata\`, \`processProof\`, or \`processProofCalldata\`), or if it uses multiproofs with a known tree that has hashed leaves. Standard merkle trees produced or validated with the @openzeppelin/merkle-tree library are safe. The problem has been patched in version 4.9.2. Some workarounds are available. For those using multiproofs: When constructing merkle trees hash the leaves and do not insert empty nodes in your trees. Using the @openzeppelin/merkle-tree package eliminates this issue. Do not accept user-provided merkle roots without reconstructing at least the first level of the tree. Verify the merkle tree structure by reconstructing it from the leaves.
+*There are 0 instance(s) of this issue:*
+
+\`\`\`solidity
+/// @audit Global finding.
+\`\`\`
+### [L-03]<a name="l-03"></a> Vulnerable versions of packages are being used
+This project is using specific package versions which are vulnerable to the specific CVEs listed below. Consider switching to more recent versions of these packages that don't have these vulnerabilities.
+- [CVE-2023-40014](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-40014) - **MEDIUM** - (\`openzeppelin-solidity >=4.0.0 <4.9.3\`): OpenZeppelin Contracts is a library for secure smart contract development. Starting in version 4.0.0 and prior to version 4.9.3, contracts using \`ERC2771Context\` along with a custom trusted forwarder may see \`_msgSender\` return \`address(0)\` in calls that originate from the forwarder with calldata shorter than 20 bytes. This combination of circumstances does not appear to be common, in particular it is not the case for \`MinimalForwarder\` from OpenZeppelin Contracts, or any deployed forwarder the team is aware of, given that the signer address is appended to all calls that originate from these forwarders. The problem has been patched in v4.9.3.
+
+- [CVE-2023-34459](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-34459) - **MEDIUM** - (\`openzeppelin-solidity >=4.7.0 <4.9.2\`): OpenZeppelin Contracts is a library for smart contract development. Starting in version 4.7.0 and prior to version 4.9.2, when the \`verifyMultiProof\`, \`verifyMultiProofCalldata\`, \`procesprocessMultiProof\`, or \`processMultiProofCalldat\` functions are in use, it is possible to construct merkle trees that allow forging a valid multiproof for an arbitrary set of leaves. A contract may be vulnerable if it uses multiproofs for verification and the merkle tree that is processed includes a node with value 0 at depth 1 (just under the root). This could happen inadvertedly for balanced trees with 3 leaves or less, if the leaves are not hashed. This could happen deliberately if a malicious tree builder includes such a node in the tree. A contract is not vulnerable if it uses single-leaf proving (\`verify\`, \`verifyCalldata\`, \`processProof\`, or \`processProofCalldata\`), or if it uses multiproofs with a known tree that has hashed leaves. Standard merkle trees produced or validated with the @openzeppelin/merkle-tree library are safe. The problem has been patched in version 4.9.2. Some workarounds are available. For those using multiproofs: When constructing merkle trees hash the leaves and do not insert empty nodes in your trees. Using the @openzeppelin/merkle-tree package eliminates this issue. Do not accept user-provided merkle roots without reconstructing at least the first level of the tree. Verify the merkle tree structure by reconstructing it from the leaves.
+*There are 3 instance(s) of this issue:*
+
+*GitHub* : [384](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L384),[1281](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1281),[1284](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1284)
 
 ### NonCritical Risk Issues
 ### [N-01]<a name="n-01"></a> \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\`
@@ -479,8 +517,6 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
-
-### Refactoring Risk Issues
 
 ### Disputed Risk Issues
 ### [D-01]<a name="d-01"></a> ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~

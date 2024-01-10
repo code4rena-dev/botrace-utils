@@ -28,7 +28,7 @@ const formatValidationErrors = (errors: ValidationError["errors"]) => {
 
 /**
  * Validates the provided report against the given schema.
- * If successul, null is returned, otherwise an array of
+ * If successful, null is returned, otherwise an array of
  * validation errors will be returned
  */
 export const validateReport = (reportJson: Report, schema: object = schemas[defaultVersion]) => {
@@ -59,7 +59,14 @@ export const getSeverityCode = (sev: Severity) => {
 };
 
 export const getInstancePartial = (instance: Instance) => {
-  return `\n${instance.content}\n\n*GitHub* : ${instance.loc.join(",")}`;
+  const partial = [];
+  if (instance.content) {
+    partial.push(`\n${instance.content}`);
+  }
+  if (instance.loc.length > 0) {
+    partial.push(`\n*GitHub* : ${instance.loc.join(",")}`);
+  }
+  return partial.join("\n");
 };
 
 export const getSubmissionPartial = (submission: Submission, locCount: number, formattedIndex: string) => {
@@ -157,9 +164,9 @@ export const renderReport = (report: Report, botName?: string) => {
     ...tocSummaryArray
   ];
 
-  // Add all severties that have data
+  // Add all severities that have data
   for (const markdownArray of Object.values(severitySections)) {
-    if (markdownArray.length === 0) continue;
+    if (markdownArray.length === 1) continue;
     partials.push(...markdownArray);
   }
 
