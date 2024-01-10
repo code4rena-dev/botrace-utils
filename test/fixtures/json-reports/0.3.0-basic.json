@@ -159,6 +159,18 @@
       }
     ]
   }, {
+    "severity": "Gas",
+    "title": "Save all the gas",
+    "description": "10 simple tricks to save gas",
+    "gasSavings": 1003,
+    "category": null,
+    "instances": [
+      {
+        "content": "**Add fake tricks here**",
+        "loc": []
+      }
+    ]
+  }, {
     "severity": "Disputed",
     "title": "~~`abi.encodePacked()` should not be used with dynamic types when passing the result to a hash function such as `keccak256()`~~",
     "description": "These do not have consecutive dynamic typed arguments",

@@ -21,6 +21,7 @@ This is the top-ranked automated findings report, from cool-bot bot. All finding
 | [[L-02](#l-02)] | Vulnerable versions of packages are being used | -| 0|
 | [[L-03](#l-03)] | Vulnerable versions of packages are being used | 3| 0|
 | [[G-01](#g-01)] | \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped | 6| 0|
+| [[G-02](#g-02)] | Save all the gas | -| 1003|
 | [[N-01](#n-01)] | \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\` | 21| 0|
 | [[D-01](#d-01)] | ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~ | 9| 0|
 
@@ -145,6 +146,11 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
+### [G-02]<a name="g-02"></a> Save all the gas
+10 simple tricks to save gas
+*There are 0 instance(s) of this issue:*
+
+**Add fake tricks here**
 
 ### NonCritical Risk Issues
 ### [N-01]<a name="n-01"></a> \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\`
@@ -321,6 +327,7 @@ exports[`test/index.test.ts TAP should render a basic report > must match snapsh
 | [[L-02](#l-02)] | Vulnerable versions of packages are being used | -| 0|
 | [[L-03](#l-03)] | Vulnerable versions of packages are being used | 3| 0|
 | [[G-01](#g-01)] | \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped | 6| 0|
+| [[G-02](#g-02)] | Save all the gas | -| 1003|
 | [[N-01](#n-01)] | \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\` | 21| 0|
 | [[D-01](#d-01)] | ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~ | 9| 0|
 
@@ -445,6 +452,11 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
+### [G-02]<a name="g-02"></a> Save all the gas
+10 simple tricks to save gas
+*There are 0 instance(s) of this issue:*
+
+**Add fake tricks here**
 
 ### NonCritical Risk Issues
 ### [N-01]<a name="n-01"></a> \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\`
