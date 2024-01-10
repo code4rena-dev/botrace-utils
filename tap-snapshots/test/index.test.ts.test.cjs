@@ -18,7 +18,7 @@ This is the top-ranked automated findings report, from cool-bot bot. All finding
 | [[H-01](#h-01)] | Bad things are afoot | 2| 0|
 | [[M-01](#m-01)] | Code does not follow the best practice of check-effects-interaction | 4| 0|
 | [[L-01](#l-01)] | Consider implementing two-step procedure for updating protocol addresses | 1| 0|
-| [[L-02](#l-02)] | Vulnerable versions of packages are being used | 0| 0|
+| [[L-02](#l-02)] | Vulnerable versions of packages are being used | -| 0|
 | [[L-03](#l-03)] | Vulnerable versions of packages are being used | 3| 0|
 | [[G-01](#g-01)] | \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped | 6| 0|
 | [[N-01](#n-01)] | \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\` | 21| 0|
@@ -318,7 +318,7 @@ exports[`test/index.test.ts TAP should render a basic report > must match snapsh
 | [[H-01](#h-01)] | Bad things are afoot | 2| 0|
 | [[M-01](#m-01)] | Code does not follow the best practice of check-effects-interaction | 4| 0|
 | [[L-01](#l-01)] | Consider implementing two-step procedure for updating protocol addresses | 1| 0|
-| [[L-02](#l-02)] | Vulnerable versions of packages are being used | 0| 0|
+| [[L-02](#l-02)] | Vulnerable versions of packages are being used | -| 0|
 | [[L-03](#l-03)] | Vulnerable versions of packages are being used | 3| 0|
 | [[G-01](#g-01)] | \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped | 6| 0|
 | [[N-01](#n-01)] | \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\` | 21| 0|

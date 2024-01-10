@@ -146,7 +146,7 @@ export const renderReport = (report: Report, botName?: string) => {
 
     // Add summary to the write severity section for proper order rendering
     tocSummaries[sub.severity].push(
-      `| [[${sevCode}-${formattedIndex}](#${sevCode.toLowerCase()}-${formattedIndex})] | ${sub.title} | ${locCount}| ${sub.gasSavings ?? 0}|`
+      `| [[${sevCode}-${formattedIndex}](#${sevCode.toLowerCase()}-${formattedIndex})] | ${sub.title} | ${locCount || "-"}| ${sub.gasSavings ?? 0}|`
     );
 
     // Write an entry to its severity section
