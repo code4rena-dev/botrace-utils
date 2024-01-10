@@ -1,0 +1,194 @@
+{
+  "comment": "**An optional, bold markdown note**",
+  "footnote": "##Extras\nAn optional markdown based footnote section",
+  "findings": [{
+    "severity": "High",
+    "title": "Bad things are afoot",
+    "description": "The additions/multiplications may silently overflow because they're in `unchecked` blocks with no preceding value checks, which may lead to unexpected results",
+    "gasSavings": null,
+    "category": null,
+    "instances": [
+      {
+        "content": "```solidity\nFile: libraries/Math.sol\n\n260:             uint256 inv = (3 * denominator) ^ 2;\n\n```",
+        "loc": [
+          "[260](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/Math.sol#L260-L260)"
+        ]
+      },
+      {
+        "content": "```solidity\nFile: contracts/types/LeftRight.sol\n\n57:              return self + uint256(int256(right));\n\n```",
+        "loc": [
+          "[57](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/LeftRight.sol#L57-L57)"
+        ]
+      }
+    ]
+  }, {
+    "severity": "Medium",
+    "title": "Code does not follow the best practice of check-effects-interaction",
+    "description": "Code should follow the best-practice of [check-effects-interaction](https://blockchain-academy.hs-mittweida.de/courses/solidity-coding-beginners-to-intermediate/lessons/solidity-11-coding-patterns/topic/checks-effects-interactions/), where state variables are updated before any external calls are made. Doing so prevents a large class of reentrancy bugs.",
+    "gasSavings": null,
+    "category": null,
+    "instances": [
+      {
+        "content": "```solidity\nFile: contracts/SemiFungiblePositionManager.sol\n\n/// @audit tickSpacing() called prior to this assignment\n626:             s_accountLiquidity[positionKey_to] = fromLiq;\n\n/// @audit tickSpacing() called prior to this assignment\n627:             s_accountLiquidity[positionKey_from] = 0;\n\n/// @audit tickSpacing() called prior to this assignment\n629:             s_accountFeesBase[positionKey_to] = fromBase;\n\n/// @audit tickSpacing() called prior to this assignment\n630:             s_accountFeesBase[positionKey_from] = 0;\n\n```",
+        "loc": [
+          "[626](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L626-L626)",
+          "[627](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L627-L627)",
+          "[629](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L629-L629)",
+          "[630](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L630-L630)"
+        ]
+      }
+    ]
+  }, {
+    "severity": "Low",
+    "title": "Consider implementing two-step procedure for updating protocol addresses",
+    "description": "A copy-paste error or a typo may end up bricking protocol functionality, or sending tokens to an address with no known private key. Consider implementing a two-step procedure for updating protocol addresses, where the recipient is set as pending, and must 'accept' the assignment by making an affirmative call. A straight forward way of doing this would be to have the target contracts implement [EIP-165](https://eips.ethereum.org/EIPS/eip-165), and to have the 'set' functions ensure that the recipient is of the right interface type.",
+    "gasSavings": null,
+    "category": null,
+    "instances": [
+      {
+        "content": "```solidity\nFile: contracts/tokens/ERC1155Minimal.sol\n\n/// @audit isApprovedForAll:  setApprovalForAll()\n77       function setApprovalForAll(address operator, bool approved) public {\n78           isApprovedForAll[msg.sender][operator] = approved;\n79   \n80           emit ApprovalForAll(msg.sender, operator, approved);\n81:      }\n\n```",
+        "loc": [
+          "[77](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L77-L81)"
+        ]
+      }
+    ]
+  }, {
+    "severity": "Low",
+    "title": "Vulnerable versions of packages are being used",
+    "description": "This project is using specific package versions which are vulnerable to the specific CVEs listed below. Consider switching to more recent versions of these packages that don't have these vulnerabilities.\n- [CVE-2023-40014](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-40014) - **MEDIUM** - (`openzeppelin-solidity >=4.0.0 <4.9.3`): OpenZeppelin Contracts is a library for secure smart contract development. Starting in version 4.0.0 and prior to version 4.9.3, contracts using `ERC2771Context` along with a custom trusted forwarder may see `_msgSender` return `address(0)` in calls that originate from the forwarder with calldata shorter than 20 bytes. This combination of circumstances does not appear to be common, in particular it is not the case for `MinimalForwarder` from OpenZeppelin Contracts, or any deployed forwarder the team is aware of, given that the signer address is appended to all calls that originate from these forwarders. The problem has been patched in v4.9.3.\n\n- [CVE-2023-34459](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-34459) - **MEDIUM** - (`openzeppelin-solidity >=4.7.0 <4.9.2`): OpenZeppelin Contracts is a library for smart contract development. Starting in version 4.7.0 and prior to version 4.9.2, when the `verifyMultiProof`, `verifyMultiProofCalldata`, `procesprocessMultiProof`, or `processMultiProofCalldat` functions are in use, it is possible to construct merkle trees that allow forging a valid multiproof for an arbitrary set of leaves. A contract may be vulnerable if it uses multiproofs for verification and the merkle tree that is processed includes a node with value 0 at depth 1 (just under the root). This could happen inadvertedly for balanced trees with 3 leaves or less, if the leaves are not hashed. This could happen deliberately if a malicious tree builder includes such a node in the tree. A contract is not vulnerable if it uses single-leaf proving (`verify`, `verifyCalldata`, `processProof`, or `processProofCalldata`), or if it uses multiproofs with a known tree that has hashed leaves. Standard merkle trees produced or validated with the @openzeppelin/merkle-tree library are safe. The problem has been patched in version 4.9.2. Some workarounds are available. For those using multiproofs: When constructing merkle trees hash the leaves and do not insert empty nodes in your trees. Using the @openzeppelin/merkle-tree package eliminates this issue. Do not accept user-provided merkle roots without reconstructing at least the first level of the tree. Verify the merkle tree structure by reconstructing it from the leaves.",
+    "gasSavings": null,
+    "category": null,
+    "instances": [
+      {
+        "content": "```solidity\n/// @audit Global finding.\n```",
+        "loc": []
+      }
+    ]
+  }, {
+    "severity": "Low",
+    "title": "Vulnerable versions of packages are being used",
+    "description": "This project is using specific package versions which are vulnerable to the specific CVEs listed below. Consider switching to more recent versions of these packages that don't have these vulnerabilities.\n- [CVE-2023-40014](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-40014) - **MEDIUM** - (`openzeppelin-solidity >=4.0.0 <4.9.3`): OpenZeppelin Contracts is a library for secure smart contract development. Starting in version 4.0.0 and prior to version 4.9.3, contracts using `ERC2771Context` along with a custom trusted forwarder may see `_msgSender` return `address(0)` in calls that originate from the forwarder with calldata shorter than 20 bytes. This combination of circumstances does not appear to be common, in particular it is not the case for `MinimalForwarder` from OpenZeppelin Contracts, or any deployed forwarder the team is aware of, given that the signer address is appended to all calls that originate from these forwarders. The problem has been patched in v4.9.3.\n\n- [CVE-2023-34459](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-34459) - **MEDIUM** - (`openzeppelin-solidity >=4.7.0 <4.9.2`): OpenZeppelin Contracts is a library for smart contract development. Starting in version 4.7.0 and prior to version 4.9.2, when the `verifyMultiProof`, `verifyMultiProofCalldata`, `procesprocessMultiProof`, or `processMultiProofCalldat` functions are in use, it is possible to construct merkle trees that allow forging a valid multiproof for an arbitrary set of leaves. A contract may be vulnerable if it uses multiproofs for verification and the merkle tree that is processed includes a node with value 0 at depth 1 (just under the root). This could happen inadvertedly for balanced trees with 3 leaves or less, if the leaves are not hashed. This could happen deliberately if a malicious tree builder includes such a node in the tree. A contract is not vulnerable if it uses single-leaf proving (`verify`, `verifyCalldata`, `processProof`, or `processProofCalldata`), or if it uses multiproofs with a known tree that has hashed leaves. Standard merkle trees produced or validated with the @openzeppelin/merkle-tree library are safe. The problem has been patched in version 4.9.2. Some workarounds are available. For those using multiproofs: When constructing merkle trees hash the leaves and do not insert empty nodes in your trees. Using the @openzeppelin/merkle-tree package eliminates this issue. Do not accept user-provided merkle roots without reconstructing at least the first level of the tree. Verify the merkle tree structure by reconstructing it from the leaves.",
+    "gasSavings": null,
+    "category": null,
+    "instances": [
+      {
+        "content": null,
+        "loc": [
+          "[384](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L384)",
+          "[1281](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1281)",
+          "[1284](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1284)"
+        ]
+      }
+    ]
+  }, {
+    "severity": "NonCritical",
+    "title": "`2**<n> - 1` should be re-written as `type(uint<n>).max`",
+    "description": "Earlier versions of solidity can use `uint<n>(-1)` instead. Expressions not including the `- 1` can often be re-written to accomodate the change (e.g. by using a `>` rather than a `>=`, which will also save some gas)",
+    "gasSavings": null,
+    "category": null,
+    "instances": [
+      {
+        "content": "```solidity\nFile: contracts/SemiFungiblePositionManager.sol\n\n384:              s_AddrToPoolIdData[univ3pool] = uint256(poolId) + 2 ** 255;\n\n1281:                     .mulDiv(collected0, totalLiquidity * 2 ** 64, netLiquidity ** 2)\n\n1284:                     .mulDiv(collected1, totalLiquidity * 2 ** 64, netLiquidity ** 2)\n\n```",
+        "loc": [
+          "[384](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L384)",
+          "[1281](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1281)",
+          "[1284](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1284)"
+        ]
+      },
+      {
+        "content": "```solidity\nFile: contracts/libraries/Math.sol\n\n311:              require(2 ** 64 > prod1);\n\n338:              prod0 |= prod1 * 2 ** 192;\n\n373:              require(2 ** 96 > prod1);\n\n400:              prod0 |= prod1 * 2 ** 160;\n\n435:              require(2 ** 128 > prod1);\n\n462:              prod0 |= prod1 * 2 ** 128;\n\n497:              require(2 ** 192 > prod1);\n\n524:              prod0 |= prod1 * 2 ** 64;\n\n```",
+        "loc": [
+          "[311](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/Math.sol#L311)",
+          "[338](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/Math.sol#L338)",
+          "[373](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/Math.sol#L373)",
+          "[400](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/Math.sol#L400)",
+          "[435](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/Math.sol#L435)",
+          "[462](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/Math.sol#L462)",
+          "[497](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/Math.sol#L497)",
+          "[524](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/Math.sol#L524)"
+        ]
+      },
+      {
+        "content": "```solidity\nFile: contracts/libraries/code4rena-devMath.sol\n\n174:                      .mulDiv(Math.absUint(amount), 2 ** 192, uint256(sqrtPriceX96) ** 2)\n\n181:                          2 ** 128,\n\n```",
+        "loc": [
+          "[174](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L174)",
+          "[181](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L181)"
+        ]
+      },
+      {
+        "content": "```solidity\nFile: contracts/types/TokenId.sol\n\n337:              if (optionRatios < 2 ** 64) {\n\n339:              } else if (optionRatios < 2 ** 112) {\n\n341:              } else if (optionRatios < 2 ** 160) {\n\n343:              } else if (optionRatios < 2 ** 208) {\n\n417:          if (optionRatios < 2 ** 64) {\n\n419:          } else if (optionRatios < 2 ** 112) {\n\n421:          } else if (optionRatios < 2 ** 160) {\n\n423:          } else if (optionRatios < 2 ** 208) {\n\n```",
+        "loc": [
+          "[337](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L337)",
+          "[339](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L339)",
+          "[341](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L341)",
+          "[343](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L343)",
+          "[417](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L417)",
+          "[419](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L419)",
+          "[421](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L421)",
+          "[423](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L423)"
+        ]
+      }
+    ]
+  }, {
+    "severity": "Gas",
+    "title": "`do`-`while` is cheaper than `for`-loops when the initial check can be skipped",
+    "description": "`for (uint256 i; i < len; ++i){ ... }` -> `do { ...; ++i } while (i < len);`",
+    "gasSavings": null,
+    "category": null,
+    "instances": [
+      {
+        "content": "```solidity\nFile: contracts/SemiFungiblePositionManager.sol\n\n550:         for (uint256 i = 0; i < ids.length; ) {\n\n583:         for (uint256 leg = 0; leg < numLegs; ) {\n\n860:         for (uint256 leg = 0; leg < numLegs; ) {\n\n```",
+        "loc": [
+          "[550](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L550-L550)",
+          "[583](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L583-L583)",
+          "[860](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L860-L860)"
+        ]
+      },
+      {
+        "content": "```solidity\nFile: contracts/multicall/Multicall.sol\n\n14:          for (uint256 i = 0; i < data.length; ) {\n\n```",
+        "loc": [
+          "[14](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/multicall/Multicall.sol#L14-L14)"
+        ]
+      },
+      {
+        "content": "```solidity\nFile: contracts/tokens/ERC1155Minimal.sol\n\n141:         for (uint256 i = 0; i < ids.length; ) {\n\n187:             for (uint256 i = 0; i < owners.length; ++i) {\n\n```",
+        "loc": [
+          "[141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141)",
+          "[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)"
+        ]
+      }
+    ]
+  }, {
+    "severity": "Disputed",
+    "title": "~~`abi.encodePacked()` should not be used with dynamic types when passing the result to a hash function such as `keccak256()`~~",
+    "description": "These do not have consecutive dynamic typed arguments",
+    "gasSavings": null,
+    "category": null,
+    "instances": [
+      {
+        "content": "```solidity\nFile: contracts/SemiFungiblePositionManager.sol\n\n594              bytes32 positionKey_from = keccak256(\n595                  abi.encodePacked(\n596                      address(univ3pool),\n597                      from,\n598                      id.tokenType(leg),\n599                      liquidityChunk.tickLower(),\n600                      liquidityChunk.tickUpper()\n601                  )\n602:             );\n\n603              bytes32 positionKey_to = keccak256(\n604                  abi.encodePacked(\n605                      address(univ3pool),\n606                      to,\n607                      id.tokenType(leg),\n608                      liquidityChunk.tickLower(),\n609                      liquidityChunk.tickUpper()\n610                  )\n611:             );\n\n945          bytes32 positionKey = keccak256(\n946              abi.encodePacked(\n947                  address(_univ3pool),\n948                  msg.sender,\n949                  _tokenType,\n950                  _liquidityChunk.tickLower(),\n951                  _liquidityChunk.tickUpper()\n952              )\n953:         );\n\n1104                 keccak256(\n1105                     abi.encodePacked(\n1106                         address(this),\n1107                         liquidityChunk.tickLower(),\n1108                         liquidityChunk.tickUpper()\n1109                     )\n1110:                )\n\n1353:            keccak256(abi.encodePacked(univ3pool, owner, tokenType, tickLower, tickUpper))\n\n1380         bytes32 positionKey = keccak256(\n1381             abi.encodePacked(address(univ3pool), owner, tokenType, tickLower, tickUpper)\n1382:        );\n\n1446:            keccak256(abi.encodePacked(univ3pool, owner, tokenType, tickLower, tickUpper))\n\n```",
+        "loc": [
+          "[594](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L594-L602)",
+          "[603](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L603-L611)",
+          "[945](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L945-L953)",
+          "[1104](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1104-L1110)",
+          "[1353](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1353-L1353)",
+          "[1380](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1380-L1382)",
+          "[1446](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1446-L1446)"
+        ]
+      },
+      {
+        "content": "```solidity\nFile: contracts/libraries/CallbackLib.sol\n\n39                           keccak256(\n40                               abi.encodePacked(\n41                                   bytes1(0xff),\n42                                   factory,\n43                                   keccak256(abi.encode(features)),\n44                                   Constants.V3POOL_INIT_CODE_HASH\n45                               )\n46:                          )\n\n```",
+        "loc": [
+          "[39](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/CallbackLib.sol#L39-L46)"
+        ]
+      },
+      {
+        "content": "```solidity\nFile: contracts/libraries/code4rena-devMath.sol\n\n57:                  (uint64(uint256(keccak256(abi.encodePacked(token0, token1, fee)))) >> 32);\n\n```",
+        "loc": [
+          "https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L57-L57"
+        ]
+      }
+    ]
+  }]
+}

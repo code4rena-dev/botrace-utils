@@ -190,27 +190,47 @@ export const schemas = {
               "type": ["string", "null"]
             },
             "instances": {
-              "description": "An array of instances where the issues has occured, this can be seperated out for every instance or it can be used as a block of instances. The instance count will be generated from the loc.",
+              "description": "An array of instances where the issues has occurred, this can be separated out for every instance or it can be used as a block of instances. The instance count will be generated from the loc.",
               "type": "array",
               "items": {
                 "type": "object",
-                "properties": {
-                  "content": {
-                    "description": "This is expected to be in code block format and must start and end with ```. Content is for code snippets, @audit tags, and file data. You may choose to stack all content for an individual file here as a block, or treat it as an individual instance. If you wish to treat these as seperate instances instead of a block of instances, and you need the file to be present for each instance, please ensure that you include this in the content of each issue. If the issue is with the whole file you may leave this empty and just have the link in the loc field",
-                    "type": ["string", "null"],
-                    "pattern": "^```([a-zA-Z0-9]+)?\\n([\\s\\S]*?)\\n```$"
-                  },
-                  "loc":{
-                    "description": "links to the line of code",
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "pattern": "https:\\/\\/github\\.com\\/[^\\/]+\\/.*#L\\d+(-L\\d+)?\\)?$"
+                "anyOf": [{
+                  // Handle content being null, or both content and loc being set
+                  "properties": {
+                    "content": {
+                      "type": ["string", "null"],
+                      "description": "Supports markdown strings and is recommended to be formatted as a codeblock (starts and ends with ```). The field is optional as long as there is at least 1 entry in the loc array. It is recommended to only omit content, if the loc and instance description sufficiently describe the issue.",
                     },
-                    "minItems": 1
-                  }
-                },
-                "required":["content", "loc"]
+                    "loc": {
+                      "type": "array",
+                      "description": "Links provided must be absolute github urls and include lines of code in the url hash. When referencing global issues or entire files, you may leave the loc array empty and use only the content field. If no links are provided, loc must be an empty array.",
+                      "items": {
+                        "type": "string",
+                        "pattern": "https:\\/\\/github\\.com\\/[^\\/]+\\/.*#L\\d+(-L\\d+)?\\)?$"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": ["loc"]
+                }, {
+                  // Handle content being set and loc as an empty array
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "description": "Supports markdown strings and is recommended to be formatted as a codeblock (starts and ends with ```). The field is optional as long as there is at least 1 entry in the loc array. It is recommended to only omit content, if the loc and instance description sufficiently describe the issue.",
+                    },
+                    "loc": {
+                      "type": "array",
+                      "description": "Links provided must be absolute github urls and include lines of code in the url hash. When referencing global issues or entire files, you may leave the loc array empty and use only the content field. If no links are provided, loc must be an empty array.",
+                      "items": {
+                        "type": "string",
+                        "pattern": "https:\\/\\/github\\.com\\/[^\\/]+\\/.*#L\\d+(-L\\d+)?\\)?$"
+                      },
+                      "maxItems": 0
+                    }
+                  },
+                  "required": ["content", "loc"]
+                }]
               },
               "minItems": 1
             }
