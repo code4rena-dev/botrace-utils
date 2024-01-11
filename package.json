@@ -49,8 +49,7 @@
     "bin/**/*.js",
     "lib/**/*.js",
     "lib/**/*.json",
-    "lib/**/*.d.ts",
-    "!lib/types/**"
+    "lib/**/*.d.ts"
   ],
   "tap": {
     "coverage": true,
