@@ -1,0 +1,40 @@
+{
+  "comment": "Report for Audit X by cool-bot",
+  "footnote": "",
+  "findings": [{
+    "severity": "NC",
+    "title": "Use `bytes.concat()` on bytes instead of `abi.encodePacked()` for clearer semantic meaning",
+    "description": "Starting with version 0.8.4, Solidity has the `bytes.concat()` function, which allows one to concatenate a list of bytes/strings, without extra padding. Using this function rather than `abi.encodePacked()` makes the intended operation more clear, leading to less reviewer confusion.",
+    "category": null,
+    "instances": [ "" ]
+  }, {
+    "severity": "Low",
+    "title": "Use `increaseAllowance()`/`decreaseAllowance()` instead of `approve()`/`safeApprove()`",
+    "description": "Changing an allowance with `approve()` brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. Refer to [ERC20 API: An Attack Vector on the Approve/TransferFrom Methods](https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM).\nIt is recommended to use the `increaseAllowance()`/`decreaseAllowance()` to avoid ths problem.",
+    "gasSavings": null,
+    "category": null,
+    "instances": [{
+      "content": "```solidity\nFile: asD/src/asD.sol\n\n}51:         SafeERC20.safeApprove(note, cNote, _amount);\n```\n",
+      "loc": [
+        "[51](https://github.com/code-423n4/2022-01-dev-test-repo/blob/516099801101950ac9e1117a70e095b06f9bf6a1/asD/src/asD.sol#L51)",
+        "[53](https://github.com/code-423n4/2022-01-dev-test-repo/blob/516099801101950ac9e1117a70e095b06f9bf6a1/asD/src/asD.sol#L53-54)",
+        "[53](https://github.com/code-423n4/2022-01-dev-test-repo/blob/516099801101950ac9e1117a70e095b06f9bf6a1/asD/src/asD.sol#L53-L54)",
+        "https://github.com/code-423n4/2022-01-dev-test-repo/blob/516099801101950ac9e1117a70e095b06f9bf6a1/asD/src/asD.sol#L55",
+        "https://github.com/code-423n4/2022-01-dev-test-repo/blob/516099801101950ac9e1117a70e095b06f9bf6a1/asD/src/asD.sol#L55-L57"
+      ]
+    }]
+  }, {
+    "severity": "GAS",
+    "title": "Consider activating `via-ir` for deploying",
+    "description": "The IR-based code generator was introduced with an aim to not only allow code generation to be more transparent and auditable but also to enable more powerful optimization passes that span across functions.\n\nYou can enable it on the command line using `--via-ir` or with the option `{\"viaIR\": true}`.\n\nThis will take longer to compile, but you can just simple test it before deploying and if you got a better benchmark then you can add --via-ir to your deploy command\n\nMore on: https://docs.soliditylang.org/en/v0.8.17/ir-breaking-changes.html",
+    "category": null,
+    "instances": [{
+      "loc": [
+        "",
+        "70",
+        "https://gihub.com/code-423n4/2022-01-dev-test-repo/blob/1234/src/Market.sol#75"
+      ],
+      "content": "All in-scope contracts"
+    }]
+  }]
+}
