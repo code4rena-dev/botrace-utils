@@ -1,5 +1,6 @@
 export type Markdown = string;
-export type LocUrl = string; // TODO: clarify format for v0.3
+// An Absolute URL with hash lines of code deep links
+export type LocUrl = string;
 
 export interface Instance {
   content: Markdown | null;
