@@ -61,12 +61,12 @@ export const getSeverityCode = (sev: Severity) => {
 export const getInstancePartial = (instance: Instance) => {
   const partial = [];
   if (instance.content) {
-    partial.push(`\n${instance.content}`);
+    partial.push(`${instance.content}`);
   }
   if (instance.loc.length > 0) {
-    partial.push(`\n*GitHub* : ${instance.loc.join(",")}`);
+    partial.push(`*GitHub* : ${instance.loc.join(",")}`);
   }
-  return partial.join("\n");
+  return partial.join("\n\n");
 };
 
 export const getSubmissionPartial = (submission: Submission, locCount: number, formattedIndex: string) => {
@@ -77,7 +77,7 @@ export const getSubmissionPartial = (submission: Submission, locCount: number, f
     submission.description,
     `*There are ${locCount} instance(s) of this issue:*`,
     ...submission.instances.map(getInstancePartial)
-  ].join("\n");
+  ].join("\n\n");
 };
 
 /**
