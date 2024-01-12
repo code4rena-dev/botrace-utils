@@ -73,7 +73,7 @@ export const getSubmissionPartial = (submission: Submission, locCount: number, f
   const sevCode = getSeverityCode(submission.severity);
   // Join each section of the partial with a newline delimiter
   return [
-    `### [${sevCode}-${formattedIndex}]<a name="${sevCode.toLowerCase()}-${formattedIndex}"></a> ${submission.title}`,
+    `\n### [${sevCode}-${formattedIndex}]<a name="${sevCode.toLowerCase()}-${formattedIndex}"></a> ${submission.title}`,
     submission.description,
     `*There are ${locCount} instance(s) of this issue:*`,
     ...submission.instances.map(getInstancePartial)

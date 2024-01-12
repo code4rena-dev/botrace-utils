@@ -1,6 +1,6 @@
 {
   "comment": "**An optional, bold markdown note**",
-  "footnote": "##Extras\nAn optional markdown based footnote section",
+  "footnote": "## Extras\nAn optional markdown based footnote section",
   "findings": [{
     "severity": "Low",
     "title": "Consider implementing two-step procedure for updating protocol addresses",

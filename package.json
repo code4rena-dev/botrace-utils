@@ -1,7 +1,11 @@
 {
   "name": "@code4rena/botrace-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code4rena-dev/botrace-utils.git"
+  },
   "main": "lib/index.js",
   "bin": {
     "c4bru": "bin/index.js"
