@@ -26,6 +26,7 @@ This is the top-ranked automated findings report, from cool-bot bot. All finding
 | [[D-01](#d-01)] | ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~ | 9| 0|
 
 ### High Risk Issues
+
 ### [H-01]<a name="h-01"></a> Bad things are afoot
 
 The additions/multiplications may silently overflow because they're in \`unchecked\` blocks with no preceding value checks, which may lead to unexpected results
@@ -51,6 +52,7 @@ File: contracts/types/LeftRight.sol
 *GitHub* : [57](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/LeftRight.sol#L57-L57)
 
 ### Medium Risk Issues
+
 ### [M-01]<a name="m-01"></a> Code does not follow the best practice of check-effects-interaction
 
 Code should follow the best-practice of [check-effects-interaction](https://blockchain-academy.hs-mittweida.de/courses/solidity-coding-beginners-to-intermediate/lessons/solidity-11-coding-patterns/topic/checks-effects-interactions/), where state variables are updated before any external calls are made. Doing so prevents a large class of reentrancy bugs.
@@ -77,6 +79,7 @@ File: contracts/SemiFungiblePositionManager.sol
 *GitHub* : [626](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L626-L626),[627](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L627-L627),[629](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L629-L629),[630](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L630-L630)
 
 ### Low Risk Issues
+
 ### [L-01]<a name="l-01"></a> Consider implementing two-step procedure for updating protocol addresses
 
 A copy-paste error or a typo may end up bricking protocol functionality, or sending tokens to an address with no known private key. Consider implementing a two-step procedure for updating protocol addresses, where the recipient is set as pending, and must 'accept' the assignment by making an affirmative call. A straight forward way of doing this would be to have the target contracts implement [EIP-165](https://eips.ethereum.org/EIPS/eip-165), and to have the 'set' functions ensure that the recipient is of the right interface type.
@@ -96,6 +99,7 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [77](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L77-L81)
+
 ### [L-02]<a name="l-02"></a> Vulnerable versions of packages are being used
 
 This project is using specific package versions which are vulnerable to the specific CVEs listed below. Consider switching to more recent versions of these packages that don't have these vulnerabilities.
@@ -108,6 +112,7 @@ This project is using specific package versions which are vulnerable to the spec
 \`\`\`solidity
 /// @audit Global finding.
 \`\`\`
+
 ### [L-03]<a name="l-03"></a> Vulnerable versions of packages are being used
 
 This project is using specific package versions which are vulnerable to the specific CVEs listed below. Consider switching to more recent versions of these packages that don't have these vulnerabilities.
@@ -120,6 +125,7 @@ This project is using specific package versions which are vulnerable to the spec
 *GitHub* : [384](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L384),[1281](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1281),[1284](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1284)
 
 ### Gas Risk Issues
+
 ### [G-01]<a name="g-01"></a> \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped
 
 \`for (uint256 i; i < len; ++i){ ... }\` -> \`do { ...; ++i } while (i < len);\`
@@ -158,6 +164,7 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
+
 ### [G-02]<a name="g-02"></a> Save all the gas
 
 10 simple tricks to save gas
@@ -167,6 +174,7 @@ File: contracts/tokens/ERC1155Minimal.sol
 **Add fake tricks here**
 
 ### NonCritical Risk Issues
+
 ### [N-01]<a name="n-01"></a> \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\`
 
 Earlier versions of solidity can use \`uint<n>(-1)\` instead. Expressions not including the \`- 1\` can often be re-written to accomodate the change (e.g. by using a \`>\` rather than a \`>=\`, which will also save some gas)
@@ -244,6 +252,7 @@ File: contracts/types/TokenId.sol
 *GitHub* : [337](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L337),[339](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L339),[341](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L341),[343](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L343),[417](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L417),[419](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L419),[421](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L421),[423](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L423)
 
 ### Disputed Risk Issues
+
 ### [D-01]<a name="d-01"></a> ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~
 
 These do not have consecutive dynamic typed arguments
@@ -328,7 +337,7 @@ File: contracts/libraries/code4rena-devMath.sol
 
 *GitHub* : https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L57-L57
 
-##Extras
+## Extras
 An optional markdown based footnote section
 `
 
@@ -350,6 +359,7 @@ exports[`test/index.test.ts TAP should render a basic report > must match snapsh
 | [[D-01](#d-01)] | ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~ | 9| 0|
 
 ### High Risk Issues
+
 ### [H-01]<a name="h-01"></a> Bad things are afoot
 
 The additions/multiplications may silently overflow because they're in \`unchecked\` blocks with no preceding value checks, which may lead to unexpected results
@@ -375,6 +385,7 @@ File: contracts/types/LeftRight.sol
 *GitHub* : [57](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/LeftRight.sol#L57-L57)
 
 ### Medium Risk Issues
+
 ### [M-01]<a name="m-01"></a> Code does not follow the best practice of check-effects-interaction
 
 Code should follow the best-practice of [check-effects-interaction](https://blockchain-academy.hs-mittweida.de/courses/solidity-coding-beginners-to-intermediate/lessons/solidity-11-coding-patterns/topic/checks-effects-interactions/), where state variables are updated before any external calls are made. Doing so prevents a large class of reentrancy bugs.
@@ -401,6 +412,7 @@ File: contracts/SemiFungiblePositionManager.sol
 *GitHub* : [626](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L626-L626),[627](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L627-L627),[629](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L629-L629),[630](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L630-L630)
 
 ### Low Risk Issues
+
 ### [L-01]<a name="l-01"></a> Consider implementing two-step procedure for updating protocol addresses
 
 A copy-paste error or a typo may end up bricking protocol functionality, or sending tokens to an address with no known private key. Consider implementing a two-step procedure for updating protocol addresses, where the recipient is set as pending, and must 'accept' the assignment by making an affirmative call. A straight forward way of doing this would be to have the target contracts implement [EIP-165](https://eips.ethereum.org/EIPS/eip-165), and to have the 'set' functions ensure that the recipient is of the right interface type.
@@ -420,6 +432,7 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [77](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L77-L81)
+
 ### [L-02]<a name="l-02"></a> Vulnerable versions of packages are being used
 
 This project is using specific package versions which are vulnerable to the specific CVEs listed below. Consider switching to more recent versions of these packages that don't have these vulnerabilities.
@@ -432,6 +445,7 @@ This project is using specific package versions which are vulnerable to the spec
 \`\`\`solidity
 /// @audit Global finding.
 \`\`\`
+
 ### [L-03]<a name="l-03"></a> Vulnerable versions of packages are being used
 
 This project is using specific package versions which are vulnerable to the specific CVEs listed below. Consider switching to more recent versions of these packages that don't have these vulnerabilities.
@@ -444,6 +458,7 @@ This project is using specific package versions which are vulnerable to the spec
 *GitHub* : [384](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L384),[1281](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1281),[1284](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/SemiFungiblePositionManager.sol#L1284)
 
 ### Gas Risk Issues
+
 ### [G-01]<a name="g-01"></a> \`do\`-\`while\` is cheaper than \`for\`-loops when the initial check can be skipped
 
 \`for (uint256 i; i < len; ++i){ ... }\` -> \`do { ...; ++i } while (i < len);\`
@@ -482,6 +497,7 @@ File: contracts/tokens/ERC1155Minimal.sol
 \`\`\`
 
 *GitHub* : [141](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L141-L141),[187](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/tokens/ERC1155Minimal.sol#L187-L187)
+
 ### [G-02]<a name="g-02"></a> Save all the gas
 
 10 simple tricks to save gas
@@ -491,6 +507,7 @@ File: contracts/tokens/ERC1155Minimal.sol
 **Add fake tricks here**
 
 ### NonCritical Risk Issues
+
 ### [N-01]<a name="n-01"></a> \`2**<n> - 1\` should be re-written as \`type(uint<n>).max\`
 
 Earlier versions of solidity can use \`uint<n>(-1)\` instead. Expressions not including the \`- 1\` can often be re-written to accomodate the change (e.g. by using a \`>\` rather than a \`>=\`, which will also save some gas)
@@ -568,6 +585,7 @@ File: contracts/types/TokenId.sol
 *GitHub* : [337](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L337),[339](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L339),[341](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L341),[343](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L343),[417](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L417),[419](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L419),[421](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L421),[423](https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/types/TokenId.sol#L423)
 
 ### Disputed Risk Issues
+
 ### [D-01]<a name="d-01"></a> ~~\`abi.encodePacked()\` should not be used with dynamic types when passing the result to a hash function such as \`keccak256()\`~~
 
 These do not have consecutive dynamic typed arguments
@@ -652,6 +670,6 @@ File: contracts/libraries/code4rena-devMath.sol
 
 *GitHub* : https://github.com/code-423n4/2023-11-code4rena-dev/blob/2647928c33be4a58883110befd7fd065448478ef/contracts/libraries/code4rena-devMath.sol#L57-L57
 
-##Extras
+## Extras
 An optional markdown based footnote section
 `
