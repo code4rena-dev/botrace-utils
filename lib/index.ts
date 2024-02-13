@@ -64,7 +64,7 @@ export const getInstancePartial = (instance: Instance) => {
     partial.push(`${instance.content}`);
   }
   if (instance.loc.length > 0) {
-    partial.push(`*GitHub* : ${instance.loc.join(",")}`);
+    partial.push(`*GitHub* : ${instance.loc.join(", ")}`);
   }
   return partial.join("\n\n");
 };
